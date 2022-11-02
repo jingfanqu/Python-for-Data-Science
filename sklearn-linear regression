@@ -1,0 +1,45 @@
+
+
+class sklearn.linear_model.LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)
+
+from sklearn.linear_model import LinearRegression as LR
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.datasets import fetch_california_housing as fch
+import pandas as pd
+
+housevalue = fch()
+X=pd.DataFrame(housevalue.data)
+print(X)
+X.shape
+y=housevalue.target
+y.min()
+y.max()
+housevalue.feature_names
+X.columns
+X.columns=housevalue.feature_names
+X.head()
+#70% train, 30% test
+Xtrain, Xtest, Ytrain, Ytest = train_test_split(X,y, test_sze=0.3, random_state=430)
+#recover index
+for i in [Xtrain, Xtest]:
+  i.index=range(i.shape[0])
+Xtest.head()
+Xtrain.head()
+
+#create model
+reg=LR(normalize=True).fit(Xtrain, Ytrain)
+yhat=reg.predict(Xtest)
+yhat.min()
+yhat.max()
+
+#w 
+reg.coef_
+reg.intercept_
+[*zip(Xtrain.columns, reg.coef_)]
+
+#result
+AveBedrms > MedInc > Latitude > Longtitude
+
+
+
