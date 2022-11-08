@@ -1,0 +1,101 @@
+%matplotlib inline
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_wine
+
+wine=load_wine()
+wine
+
+wine.data
+wine.data.shape
+wine.target
+
+#实例化
+#训练集带入实例化后的模型去进行训练，使用的接口是fit
+#使用其它接口将测试集导入我们训练好的模型，获取希望获取的结果（score, Y_test）
+
+from sklearn.model_selection import train_test_split
+
+Xtrain, Xtest, Ytrain, Ytest=train_test_split(wine.data, wine.target, test_size=0.3)
+
+clf=DecisionTreeClassifier(random_state=0)
+rfc=RandomForestClassifier(random_state=0)
+
+clf=clf.fit(Xtrain, Ytrain)
+rfc=rfc.fit(Xtrain, Ytrain)
+
+score_c=clf.score(Xtest, Ytest)
+score_r=rfc.score(Xtest, Ytest)
+print("Single Tree:{}".format(score_c),
+"Random Forest:{}".format(score_r)
+)
+
+#交叉验证:将数据集分为n份，依次取每一份做测试集，每n-1份做训练集，多次训练模型以观测模型稳定性的方法
+
+from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+
+rfc=RandomForestClassifier(n_estimators=25)
+rfc_s=cross_val_score(rfc, wine_data, wine.target, cv=10)
+
+clf=DecisionTreeClassifier()
+clf_s=cross_val_score(clf,wine.data,wine.target,cv=10)
+
+plt.plot(range(1,11), rfs_s, label="RandomForest")
+plt.plot(range(1,11), rfs_s, label="DecisionTree")
+plt.legend()
+plt.show()
+
+#100次交叉验证
+rfc_l=[]
+clf_l=[]
+
+for i in range(10):
+  rfc=RandomForestClassifier(n_estimators=25)
+  rfc_s=cross_val_score(rfc, wine_data, wine.target, cv=10).mean()
+  rfc_l.append(rfc_s)
+  clf=DecisionTreeClassifier()
+  clf_s=cross_val_score(clf, wine.data, wine.target, cv=10).mean()
+  clf_l.append(clf_s)
+
+plt.plot(range(1,11), rfc_l, label="Random Forest")
+plt.plot(range(1,11), clf_l, label="Decision Tree")
+plt.legend()
+plt.show()
+
+#学习曲线 n_estimators
+
+superpa = []
+for i in range(200):
+  rfc = RandomForestClassifier(n_estimators=i+1,n_jobs=-1)
+  rfc_s = cross_val_score(rfc,wine.data,wine.target,cv=10).mean()
+  superpa.append(rfc_s)
+print(max(superpa),superpa.index(max(superpa)))
+plt.figure(figsize=[20,5])
+plt.plot(range(1,201),superpa)
+plt.show()
+
+
+import numpy as np
+from scipy.special import comb
+np.array([comb(25,i)*(0.2**i)*((1-0.2)**(25-i)) for i in range(13,26)]).sum()
+
+#重要属性 estimators 查看森林中树的情况
+rfc=RandomForestClassifier(n_estimators=25, random_state=2)
+rfc=rfc.fit(Xtrain, Ytrain)
+
+rfc.estimators_
+rfc.estimators_[0].random_state
+
+for i in range(len(rfc.estimators_)):
+  print(rfc.estimators_[i].random_state)
+
+
+
+
+
+
+
+
+
+
+
