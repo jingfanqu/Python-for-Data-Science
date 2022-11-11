@@ -89,6 +89,16 @@ rfc.estimators_[0].random_state
 for i in range(len(rfc.estimators_)):
   print(rfc.estimators_[i].random_state)
 
+rfc=RandomForestClassifier(n_estimators=25, oob_score=True)
+rfc=rfc.fit(wine.data,wine.target)
+rfc.oob_score_
+
+
+rfc.feature_importances_
+rfc.predict(Xtest)
+rfc.predict_proba(Xtest)
+
+
 
 
 
